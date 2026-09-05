@@ -41,7 +41,7 @@
 * **Spectrum Library** - Port : `7575`
 
 ### 🛠️ Server
-* **Zhttp** (Serveur HTTP léger)
+* **Zhttp** (Serveur HTTP léger) - Port : `8888`
 * **PS5 LocalSend** (Récepteur de fichiers réseau local) - Port : `53317`
 * **websrv** (Serveur web local) - Port : `8080`
 
