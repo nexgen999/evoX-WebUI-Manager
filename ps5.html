@@ -26,7 +26,8 @@ main{padding:30px clamp(20px,4vw,55px);max-width:1500px;width:100%;margin:auto}
 .card{position:relative;min-height:210px;padding:25px;border:1px solid #10355a;border-radius:20px;background:linear-gradient(145deg,#091827e8,#040c16e8);overflow:hidden;transition:.25s;display:flex;flex-direction:column}
 .card:before{content:"";position:absolute;inset:auto -20% -55% 25%;height:160px;background:#007bff25;filter:blur(45px);border-radius:50%}
 .card:hover{transform:translateY(-5px);border-color:#138de0;box-shadow:0 15px 45px #001d3c88}
-.icon{width:58px;height:58px;display:grid;place-items:center;border-radius:15px;background:#071c30;border:1px solid #1477b9;font-size:18px;font-weight:bold;color:var(--blue);margin-bottom:22px}
+.icon{width:58px;height:58px;display:grid;place-items:center;border-radius:15px;background:#071c30;border:1px solid #1477b9;margin-bottom:22px;overflow:hidden}
+.icon img{width:28px;height:28px;object-fit:contain;filter:drop-shadow(0 0 4px #00aaff)}
 .card h2{margin:0 0 7px;font-size:21px}.desc{color:#8295aa;font-size:13px;line-height:1.5}
 .count{position:absolute;right:22px;top:22px;border:1px solid #174d78;padding:5px 9px;border-radius:8px;font-size:11px;color:#80cfff}
 .open{display:inline-flex;margin-top:auto;padding:10px 16px;border:1px solid var(--blue);border-radius:10px;color:#fff;text-decoration:none;font-size:13px;background:#007bff12;width:fit-content;transition:.2s}
@@ -62,7 +63,7 @@ footer{color:#526a83;text-align:center;margin-top:38px;font-size:12px}
       </select>
       <input type="text" id="custom-host-input" placeholder="Ex: 192.168.1.50" style="display:none;" oninput="updateCustomHost(this)">
     </div>
-    <a style="display:flex;gap:13px;align-items:center;color:#aebed1;text-decoration:none;padding:13px 15px;border-radius:12px;cursor:pointer;transition:.2s;" id="nav-credits" onclick="switchView('credits')">[★] &nbsp; Crédits</a>
+    <a style="display:flex;gap:13px;align-items:center;color:#aebed1;text-decoration:none;padding:13px 15px;border-radius:12px;cursor:pointer;transition:.2s;" id="nav-credits" onclick="switchView('credits')"><img src="https://img.icons8.com/ios-filled/50/00aaff/star.png" style="width:16px;height:16px;"> &nbsp; Crédits</a>
   </div>
 </aside>
 <main>
@@ -81,66 +82,66 @@ const WEBUI = {
   host: "127.0.0.1",
   categories: [
     {
-      id: "hen", name: "HEN", icon: "⚡", symbol: "[HEN]",
+      id: "hen", name: "HEN", iconImg: "https://img.icons8.com/ios-filled/50/00aaff/lightning-bolt.png",
       description: "Interfaces HEN et gestion du système",
       links: [
-        { name: "PLDMGR", description: "Payload Manager", port: 8084, icon: ">" },
-        { name: "EvoX", description: "Interface EvoX principale", port: 8085, icon: ">" },
-        { name: "Prospero Manager", description: "Gestion système Prospero", port: 7070, icon: ">" },
-        { name: "Pizza-Hen Toolbox", description: "Pizza-Hen", port: 8080, icon: ">" },
-        { name: "Elf-Arsenal", description: "Boîte à outils ELF", port: 6969, icon: ">" },
-        { name: "Voidshell", description: "Shell système", port: 7007, icon: ">" },
-        { name: "Kura", description: "Interface Kura", port: 8535, icon: ">" }
+        { name: "PLDMGR", description: "Payload Manager", port: 8084, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/lightning-bolt.png" },
+        { name: "EvoX", description: "Interface EvoX principale", port: 8085, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/lightning-bolt.png" },
+        { name: "Prospero Manager", description: "Gestion système Prospero", port: 7070, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/lightning-bolt.png" },
+        { name: "Pizza-Hen Toolbox", description: "Pizza-Hen", port: 8080, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/lightning-bolt.png" },
+        { name: "Elf-Arsenal", description: "Boîte à outils ELF", port: 6969, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/lightning-bolt.png" },
+        { name: "Voidshell", description: "Shell système", port: 7007, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/lightning-bolt.png" },
+        { name: "Kura", description: "Interface Kura", port: 8535, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/lightning-bolt.png" }
       ]
     },
     {
-      id: "game-management", name: "Game Management", icon: "🎮", symbol: "[GAME]",
+      id: "game-management", name: "Game Management", iconImg: "https://img.icons8.com/ios-filled/50/00aaff/controller.png",
       description: "Gestion des jeux et montage",
       links: [
-        { name: "Game Compressor", description: "Compression et gestion des ROMs/jeux", port: 5910, icon: ">" },
-        { name: "ShadowMountPlus", description: "Montage avancé de jeux", port: 10101, icon: ">" }
+        { name: "Game Compressor", description: "Compression et gestion des ROMs/jeux", port: 5910, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/controller.png" },
+        { name: "ShadowMountPlus", description: "Montage avancé de jeux", port: 10101, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/controller.png" }
       ]
     },
     {
-      id: "Save", name: "Saves Management", icon: "💾", symbol: "[SAVE]",
+      id: "Save", name: "Saves Management", iconImg: "https://img.icons8.com/ios-filled/50/00aaff/save.png",
       description: "Gestion des sauvegardes",
       links: [
-        { name: "Garlic SaveMgr", description: "Compression et gestion des sauvegardes", port: 8082, icon: ">" },
-        { name: "Garlic Saves", description: "Site web officiel", url: "https://garlicsaves.com", icon: ">" }
+        { name: "Garlic SaveMgr", description: "Compression et gestion des sauvegardes", port: 8082, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/save.png" },
+        { name: "Garlic Saves", description: "Site web officiel", url: "https://garlicsaves.com", iconImg: "https://img.icons8.com/ios-filled/50/00aaff/save.png" }
       ]
     },
     {
-      id: "cheat", name: "Cheat", icon: "🎯", symbol: "[CHEAT]",
+      id: "cheat", name: "Cheat", iconImg: "https://img.icons8.com/ios-filled/50/00aaff/bullseye.png",
       description: "Outils de triche et modification",
       links: [
-        { name: "CheatRunner", description: "Moteur de triche et édition mémoire", port: 9999, icon: ">" },
-        { name: "Kyline Core", description: "Moteur de triche et édition mémoire", port: 9023, icon: ">" }
+        { name: "CheatRunner", description: "Moteur de triche et édition mémoire", port: 9999, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/bullseye.png" },
+        { name: "Kyline Core", description: "Moteur de triche et édition mémoire", port: 9023, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/bullseye.png" }
       ]
     },
     {
-      id: "free-shop", name: "Free Shop", icon: "🛒", symbol: "[SHOP]",
+      id: "free-shop", name: "Free Shop", iconImg: "https://img.icons8.com/ios-filled/50/00aaff/shopping-cart.png",
       description: "Boutiques et téléchargements",
       links: [
-        { name: "Pegasus-Dl", description: "Téléchargeur Pegasus", port: 6970, icon: ">" },
-        { name: "Spectrum Library", description: "Bibliothèque Spectrum", port: 7575, icon: ">" }
+        { name: "Pegasus-Dl", description: "Téléchargeur Pegasus", port: 6970, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/shopping-cart.png" },
+        { name: "Spectrum Library", description: "Bibliothèque Spectrum", port: 7575, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/shopping-cart.png" }
       ]
     },
     {
-      id: "server", name: "Server", icon: "🌐", symbol: "[SRV]",
+      id: "server", name: "Server", iconImg: "https://img.icons8.com/ios-filled/50/00aaff/globe.png",
       description: "Serveurs web et utilitaires réseau",
       links: [
-        { name: "Zhttp", description: "Serveur HTTP léger", port: null, icon: ">" },
-        { name: "PS5 LocalSend", description: "PS5 LocalSend is a local-network file receiver", port: 53317, icon: ">" },
-        { name: "websrv", description: "Serveur web local", port: 8080, icon: ">" }
+        { name: "Zhttp", description: "Serveur HTTP léger", port: 8888, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/globe.png" },
+        { name: "PS5 LocalSend", description: "PS5 LocalSend is a local-network file receiver", port: 53317, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/globe.png" },
+        { name: "websrv", description: "Serveur web local", port: 8080, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/globe.png" }
       ]
     },
     {
-      id: "file-manager", name: "File Manager", icon: "📁", symbol: "[FILE]",
+      id: "file-manager", name: "File Manager", iconImg: "https://img.icons8.com/ios-filled/50/00aaff/folder.png",
       description: "Gestionnaires de fichiers",
       links: [
-        { name: "BFpilot", description: "Navigateur et gestionnaire de fichiers", port: 5905, icon: ">" },
-        { name: "PS5 Web File Manager", description: "Navigateur et gestionnaire de fichiers", port: 8888, icon: ">" },
-        { name: "PS5 File Explorer", description: "Navigateur et gestionnaire de fichiers", port: 5905, icon: ">" }
+        { name: "BFpilot", description: "Navigateur et gestionnaire de fichiers", port: 5905, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/folder.png" },
+        { name: "PS5 Web File Manager", description: "Navigateur et gestionnaire de fichiers", port: 8888, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/folder.png" },
+        { name: "PS5 File Explorer", description: "Navigateur et gestionnaire de fichiers", port: 5905, iconImg: "https://img.icons8.com/ios-filled/50/00aaff/folder.png" }
       ]
     }
   ]
@@ -176,9 +177,9 @@ function switchView(viewId, catId = null) {
 
 function renderSidebar() {
   const nav = document.getElementById('sidebar-nav');
-  let html = `<a class="${currentView === 'dashboard' ? 'active' : ''}" onclick="switchView('dashboard')">[ &nbsp; Dashboard</a>`;
+  let html = `<a class="${currentView === 'dashboard' ? 'active' : ''}" onclick="switchView('dashboard')"><img src="https://img.icons8.com/ios-filled/50/00aaff/home.png" style="width:16px;height:16px;"> &nbsp; Dashboard</a>`;
   WEBUI.categories.forEach(c => {
-    html += `<a class="${currentView === 'category' && activeCategory === c.id ? 'active' : ''}" onclick="switchView('category', '${c.id}')">${c.symbol} &nbsp; ${c.name}</a>`;
+    html += `<a class="${currentView === 'category' && activeCategory === c.id ? 'active' : ''}" onclick="switchView('category', '${c.id}')"><img src="${c.iconImg}" style="width:16px;height:16px;"> &nbsp; ${c.name}</a>`;
   });
   nav.innerHTML = html;
 
@@ -219,10 +220,10 @@ function render() {
     container.innerHTML = WEBUI.categories.map(c => `
       <article class="card" onclick="switchView('category', '${c.id}')" style="cursor:pointer;">
         <span class="count">${c.links.length} lien${c.links.length > 1 ? 's' : ''}</span>
-        <div class="icon">${c.symbol}</div>
+        <div class="icon"><img src="${c.iconImg}" alt=""></div>
         <h2>${c.name}</h2>
         <div class="desc">${c.description}</div>
-        <div class="open">Explorer -></div>
+        <div class="open">Explorer →</div>
       </article>
     `).join('');
   } else if (currentView === 'category') {
@@ -251,10 +252,10 @@ function render() {
       return `
         <article class="card" ${hasLink ? `onclick="window.open('${targetUrl}', '_blank')"` : ''} style="${hasLink ? 'cursor:pointer;' : 'opacity:0.6;'}">
           <span class="count" style="${hasLink ? '' : 'color:#f87171; border-color:#7f1d1d;'}">${badgeText}</span>
-          <div class="icon">${l.icon}</div>
+          <div class="icon"><img src="${l.iconImg}" alt=""></div>
           <h2>${l.name}</h2>
           <div class="desc">${l.description}</div>
-          ${hasLink ? `<a class="open" href="${targetUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Ouvrir -></a>` : `<div class="open" style="border-color:#475569; color:#94a3b8; background:transparent;">Non disponible</div>`}
+          ${hasLink ? `<a class="open" href="${targetUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Ouvrir →</a>` : `<div class="open" style="border-color:#475569; color:#94a3b8; background:transparent;">Non disponible</div>`}
         </article>
       `;
     }).join('');
