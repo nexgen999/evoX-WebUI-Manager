@@ -17,7 +17,7 @@
 * **PLDMGR** (Payload Manager) - Port : `8084`
 * **EvoX** (Interface principale) - Port : `8085`
 * **Prospero Manager** (Gestion système Prospero) - Port : `7070`
-* **Pizza-Hen** - Port : `7070`
+* **Pizza-Hen Toolbox** - Port : `8080`
 * **Elf-Arsenal** (Boîte à outils ELF) - Port : `6969`
 * **Voidshell** (Shell système) - Port : `7007`
 * **Kura** - Port : `8535`
@@ -32,6 +32,7 @@
 
 ### 🎯 Cheat
 * **CheatRunner** (Moteur de triche et édition mémoire) - Port : `9999`
+* **Kyline Core** (Moteur de triche et édition mémoire) - Port : `9023`
 
 ### 🛒 Free Shop
 * **Pegasus-Dl** (Téléchargeur Pegasus) - Port : `6970`
