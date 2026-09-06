@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>evoX WebUI Manager</title>
+<style>
+/* ==========================================================================
+   1. STYLES DE BASE ET LAYOUT PC / PS5
+   ========================================================================== */
+:root {
+  --bg: #020711;
+  --panel: #07111f;
+  --panel2: #091827;
+  --line: #12345a;
+  --blue: #00aaff;
+  --blue2: #006eff;
+  --text: #f4f8ff;
+  --muted: #7e91aa;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: Inter, Segoe UI, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+body {
+  background: radial-gradient(circle at 75% 10%, #06325c55, transparent 32%),
+              radial-gradient(circle at 90% 85%, #006eff22, transparent 28%),
+              #020711;
+}
+
+.app {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  overflow: hidden;
+}
+
+/* SIDEBAR FIXE */
+.sidebar {
+  border-right: 1px solid #0c2b4b;
+  background: #030a14e8;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.logo {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  padding: 0 14px 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.logo span { color: var(--blue); }
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.nav a {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+  color: #aebed1;
+  text-decoration: none;
+  padding: 11px 15px;
+  border-radius: 12px;
+  transition: .2s;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.nav a img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.nav a:hover, .nav a.active {
+  color: #fff;
+  background: linear-gradient(90deg, #006eff35, #00aaff08);
+  box-shadow: inset 2px 0 var(--blue);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  border-top: 1px solid #0c2b4b;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.host-config {
+  background: #050f1d;
+  border: 1px solid #12345a;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.host-config label {
+  font-size: 11px;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 5px;
+}
+
+.host-config select, .host-config input {
+  width: 100%;
+  background: #020711;
+  border: 1px solid #174d78;
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  outline: none;
+}
+
+.host-config input { margin-top: 6px; }
+
+/* CONTENU PRINCIPAL */
+main {
+  height: 100vh;
+  overflow-y: auto;
+  padding: 30px clamp(20px, 4vw, 55px);
+  width: 100%;
+}
+
+.main-wrapper {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 38px;
+}
+
+.kicker {
+  color: var(--blue);
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: clamp(34px, 5vw, 66px);
+  line-height: 1;
+  margin: 8px 0 10px;
+  letter-spacing: -3px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* ==========================================================================
+   2. COMPOSANTS DASHBOARD & CARTES
+   ========================================================================== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+@keyframes cardAppear {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.card, .credit-card {
+  position: relative;
+  min-height: 210px;
+  padding: 25px;
+  border: 1px solid #10355a;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #091827e8, #040c16e8);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  animation: cardAppear 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:before, .credit-card:before {
+  content: "";
+  position: absolute;
+  inset: auto -20% -55% 25%;
+  height: 160px;
+  background: #007bff25;
+  filter: blur(45px);
+  border-radius: 50%;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0.5;
+}
+
+.card:hover:before, .credit-card:hover:before {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.card:hover, .credit-card:hover {
+  transform: translateY(-8px) scale(1.015);
+  border-color: var(--blue);
+  box-shadow: 0 20px 40px rgba(0, 170, 255, 0.15), 0 0 15px rgba(0, 170, 255, 0.1);
+}
+
+.icon {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: #071c30;
+  border: 1px solid #1477b9;
+  margin-bottom: 22px;
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.icon img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 4px #00aaff);
+}
+
+.icon.avatar-icon {
+  border-radius: 50%;
+  border: 2px solid var(--blue);
+}
+
+.icon.avatar-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  filter: none;
+}
+
+.card:hover .icon {
+  transform: scale(1.1) rotate(4deg);
+  border-color: var(--blue);
+}
+
+.card h2 { margin: 0 0 7px; font-size: 21px; }
+.desc { color: #8295aa; font-size: 13px; line-height: 1.5; }
+.count { position: absolute; right: 22px; top: 22px; border: 1px solid #174d78; padding: 5px 9px; border-radius: 8px; font-size: 11px; color: #80cfff; }
+
+.open {
+  display: inline-flex;
+  margin-top: auto;
+  padding: 10px 16px;
+  border: 1px solid var(--blue);
+  border-radius: 10px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  background: #007bff12;
+  width: fit-content;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover .open {
+  background: #007bff33;
+  transform: translateX(4px);
+}
+
+/* ==========================================================================
+   3. STYLES DOWNLOADS & PAYLOADS
+   ========================================================================== */
+.dl-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 14px;
+  flex-wrap: wrap;
+}
+
+.dl-controls-left, .dl-controls-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.view-btn {
+  background: #030a14;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.view-btn.active, .view-btn:hover {
+  background: #007bff25;
+  border-color: var(--blue);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 170, 255, 0.2);
+}
+
+.dl-section {
+  margin-bottom: 35px;
+}
+
+.dl-category-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--blue);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.dl-grid .dl-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.dl-grid .dl-card:hover {
+  border-color: var(--blue);
+  transform: translateY(-3px);
+  background: var(--panel2);
+}
+
+.dl-grid .dl-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.dl-grid .dl-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  word-break: break-word;
+}
+
+.dl-grid .dl-card-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.dl-grid .dl-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.dl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dl-list .dl-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.dl-list .dl-card:hover {
+  border-color: var(--blue);
+  background: var(--panel2);
+}
+
+.dl-list .dl-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.dl-list .dl-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.dl-list .dl-card-desc {
+  display: none;
+}
+
+.dl-list .dl-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.dl-version {
+  font-size: 11px;
+  background: rgba(0, 170, 255, 0.15);
+  color: var(--blue);
+  border: 1px solid rgba(0, 170, 255, 0.3);
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dl-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: .2s ease;
+  display: inline-block;
+  text-align: center;
+}
+
+.dl-btn-primary {
+  background: var(--blue);
+  color: #000;
+  border: none;
+}
+
+.dl-btn-primary:hover {
+  background: #33bbff;
+  box-shadow: 0 0 10px rgba(0, 170, 255, 0.4);
+}
+
+.dl-btn-secondary {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--line);
+}
+
+.dl-btn-secondary:hover {
+  border-color: var(--blue);
+  color: #fff;
+}
+
+/* RSS STYLE */
+.rss-feed-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.rss-item-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  animation: cardAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.rss-item-card:hover {
+  border-color: var(--blue);
+  background: var(--panel2);
+}
+
+.rss-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.rss-item-source {
+  color: var(--blue);
+  font-weight: 600;
+  background: rgba(0, 170, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 170, 255, 0.2);
+}
+
+.rss-item-date { color: var(--muted); }
+.rss-item-title { font-size: 18px; font-weight: 700; color: #fff; text-decoration: none; line-height: 1.3; }
+.rss-item-title:hover { color: var(--blue); }
+.rss-item-desc { font-size: 13px; color: #aebed1; line-height: 1.5; word-break: break-word; }
+.rss-item-footer { margin-top: 4px; }
+.rss-item-link { font-size: 12px; color: var(--blue); text-decoration: none; font-weight: 600; }
+.rss-item-link:hover { text-decoration: underline; }
+
+/* CRÉDITS */
+.credits-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 900px; }
+.credit-card { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 35px 25px; text-decoration: none; color: var(--text); border-radius: 24px; }
+.avatar { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--blue); background: #071c30; margin-bottom: 20px; box-shadow: 0 8px 25px #00000088; transition: transform 0.3s ease; }
+.credit-card:hover .avatar { transform: scale(1.05); }
+.credit-info h3 { margin: 0 0 6px; font-size: 22px; color: #fff; }
+.credit-info p { margin: 0 0 14px; font-size: 14px; color: var(--muted); line-height: 1.4; }
+.credit-role { display: inline-block; font-size: 12px; color: var(--blue); background: #007bff15; padding: 4px 12px; border-radius: 8px; border: 1px solid #124d7c; font-weight: 600; }
+
+footer { color: #526a83; text-align: center; margin-top: 38px; font-size: 12px; padding-bottom: 20px; }
+
+@media(max-width:900px) {
+  .app { grid-template-columns: 75px 1fr; }
+  .logo { font-size: 22px; padding: 10px 8px 25px; }
+  .nav a { justify-content: center; font-size: 0; }
+  .nav a img { width: 20px; height: 20px; }
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .credits-grid { grid-template-columns: 1fr; }
+  .dl-controls { flex-direction: column; align-items: stretch; }
+  .dl-controls-left, .dl-controls-right { justify-content: center; }
+}
+
+@media(max-width:600px) {
+  html, body { overflow: auto; }
+  .app { display: block; height: auto; overflow: visible; }
+  .sidebar { height: auto; border-right: none; border-bottom: 1px solid #0c2b4b; }
+  main { height: auto; overflow: visible; padding: 24px 16px; }
+  .top { align-items: flex-start; flex-direction: column; }
+  .grid { grid-template-columns: 1fr; }
+  .title { font-size: 42px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="logo" onclick="switchView('dashboard')">evo<span>X</span></div>
+  <nav class="nav" id="sidebar-nav">
+    <!-- Menu dynamique -->
+  </nav>
+  <div class="sidebar-footer">
+    <div class="host-config">
+      <label for="host-select">IP Redirection</label>
+      <select id="host-select" onchange="handleHostChange(this)">
+        <option value="127.0.0.1">127.0.0.1 (Localhost)</option>
+        <option value="custom">IP Personnalisée...</option>
+      </select>
+      <input type="text" id="custom-host-input" placeholder="Ex: 192.168.1.50" style="display:none;" oninput="updateCustomHost(this)">
+    </div>
+    <a style="display:flex;gap:13px;align-items:center;color:#aebed1;text-decoration:none;padding:11px 15px;border-radius:12px;cursor:pointer;transition:.2s;font-size:14px;" id="nav-credits" onclick="switchView('credits')"><img src="https://img.icons8.com/ios-filled/50/00aaff/star.png" style="width:16px;height:16px;"> &nbsp; Crédits</a>
+  </div>
+</aside>
+
+<main>
+  <div class="main-wrapper">
+    <section class="top">
+      <div>
+        <div class="kicker" id="view-kicker">evoX ecosystem</div>
+        <div class="title" id="view-title">WebUI Manager</div>
+        <div class="subtitle" id="view-subtitle">Centralise et lance toutes tes interfaces WebUI locales.</div>
+      </div>
+    </section>
+
+    <section id="main-content"></section>
+
+    <footer>evoX WebUI Manager · PC Edition- Build Lastest</footer>
+  </div>
+</main>
+</div>
+
+<script>
+/* ==========================================================================
+   SOURCES REPOSITORIES ET DOWNLOADS
+   ========================================================================== */
+const REPOSITORIES = [
+  "https://github.com/notmaj0r/ProsperoMgr",
+  "https://github.com/etaHEN/etaHEN",
+  "https://github.com/aydencharles/onionHEN",
+  "https://github.com/Michele-M-Media/PIZZA-HEN",
+  "https://github.com/NookieAI/kura",
+  "https://github.com/itsPLK/ps5-payload-manager",
+  "https://github.com/itsPLK/ps5-unified-autoloader"
+];
+
+const PKG_FALLBACK_URLS = [
+  "https://nexgen999.github.io/PS5-Super-PLDMGR-Auto-Updater/PKGjson/pkg.json",
+  "https://raw.githubusercontent.com/nexgen999/PS5-Super-PLDMGR-Auto-Updater/main/PKGjson/pkg.json",
+  "https://cdn.jsdelivr.net/gh/nexgen999/PS5-Super-PLDMGR-Auto-Updater@main/PKGjson/pkg.json",
+  "https://corsproxy.io/?" + encodeURIComponent("https://raw.githubusercontent.com/nexgen999/PS5-Super-PLDMGR-Auto-Updater/main/PKGjson/pkg.json")
+];
+
+const ELF_FALLBACK_URLS = [
+  "https://nexgen999.github.io/PS5-Super-PLDMGR-Auto-Updater/json/payloads.json",
+  "https://raw.githubusercontent.com/nexgen999/PS5-Super-PLDMGR-Auto-Updater/main/json/payloads.json",
+  "https://cdn.jsdelivr.net/gh/nexgen999/PS5-Super-PLDMGR-Auto-Updater@main/json/payloads.json"
+];
+
+const AIO_PACKS = [
+  {
+    title: "PS5 Super PLDMGR Auto Updated (Offline AIO)",
+    version: "Latest",
+    desc: "Pack AIO complet pré-configuré pour une mise à jour hors-ligne.",
+    url: "https://github.com/nexgen999/PS5-Super-PLDMGR-Auto-Updater/releases/download/latest/ps5_super_pldmgr_auto_updated_offline.aio_latest.zip",
+    category: "Packs AIO"
+  },
+  {
+    title: "PS5 PKG AIO",
+    version: "Latest",
+    desc: "Archive regroupant l'ensemble des paquets PKG essentiels.",
+    url: "https://github.com/nexgen999/PS5-Super-PLDMGR-Auto-Updater/releases/download/latest/PS5PKG_aio_latest.zip",
+    category: "Packs AIO"
+  }
+];
+
+/* ==========================================================================
+   CONFIGURATIONS GLOBALES
+   ========================================================================== */
+const EXPLOIT_SOURCES = [
+  {
+    id: "ps5webkit",
+    name: "ps5webkit (nexgen999)",
+    description: "Hôte d'exploit PS5 WebKit principal",
+    iconImg: "https://pbs.twimg.com/profile_images/2037201736910213120/p9wyelOV_400x400.jpg",
+    url: "https://nexgen999.github.io/ps5webkit/index.html"
+  },
+  {
+    id: "custom-exploit-2",
+    name: "Master-UMTX",
+    description: "Hôte d'exploit PS5 WebKit principal",
+    iconImg: "https://pbs.twimg.com/profile_images/2060187925095313408/m0Yw_lmE_400x400.jpg",
+    url: "https://masterps0.github.io/UMTX2/"
+  },
+  {
+    id: "custom-exploit-3",
+    name: "VoX-DoN-3 / Host",
+    description: "Deuxième source d'exploit alternative",
+    iconImg: "https://img.icons8.com/color/96/rocket.png",
+    url: "https://voxdon3.github.io/VoX-DoN-3/"
+  }
+];
+
+const WEBUI = {
+  host: "127.0.0.1",
+  categories: [
+    {
+      id: "hen", name: "HEN", iconImg: "https://img.icons8.com/color/96/lightning-bolt.png",
+      description: "Interfaces HEN et gestion du système",
+      links: [
+        { name: "PLDMGR", description: "Payload Manager", port: 8084, iconImg: "https://img.icons8.com/color/96/lightning-bolt.png" },
+        { name: "EvoX", description: "Interface EvoX principale", port: 8085, iconImg: "https://img.icons8.com/color/96/lightning-bolt.png" },
+        { name: "Prospero Manager", description: "Gestion système Prospero", port: 7070, iconImg: "https://img.icons8.com/color/96/lightning-bolt.png" },
+        { name: "Pizza-Hen Toolbox", description: "Pizza-Hen", port: 8080, iconImg: "https://img.icons8.com/color/96/lightning-bolt.png" },
+        { name: "Elf-Arsenal", description: "Boîte à outils ELF", port: 6969, iconImg: "https://img.icons8.com/color/96/lightning-bolt.png" },
+        { name: "Voidshell", description: "Shell système", port: 7007, iconImg: "https://img.icons8.com/color/96/lightning-bolt.png" },
+        { name: "Kura", description: "Interface Kura", port: 8535, iconImg: "https://img.icons8.com/color/96/lightning-bolt.png" }
+      ]
+    },
+    {
+      id: "game-management", name: "Game Management", iconImg: "https://img.icons8.com/color/96/controller.png",
+      description: "Gestion des jeux et montage",
+      links: [
+        { name: "Game Compressor", description: "Compression et gestion des ROMs/jeux", port: 5910, iconImg: "https://img.icons8.com/color/96/compress.png" },
+        { name: "ShadowMountPlus", description: "Montage avancé de jeux", port: 10101, iconImg: "https://img.icons8.com/color/96/hdd.png" }
+      ]
+    },
+    {
+      id: "Save", name: "Saves Management", iconImg: "https://img.icons8.com/color/96/save.png",
+      description: "Gestion des sauvegardes",
+      links: [
+        { name: "Garlic SaveMgr", description: "Compression et gestion des sauvegardes", port: 8082, iconImg: "https://img.icons8.com/color/96/save.png" },
+        { name: "Garlic Saves", description: "Site web officiel", url: "https://garlicsaves.com", iconImg: "https://img.icons8.com/color/96/cloud-checked.png" }
+      ]
+    },
+    {
+      id: "cheat", name: "Cheat", iconImg: "https://img.icons8.com/color/96/trophy.png",
+      description: "Outils de triche et modification",
+      links: [
+        { name: "CheatRunner", description: "Moteur de triche et édition mémoire", port: 9999, iconImg: "https://img.icons8.com/color/96/trophy.png" },
+        { name: "Kyline Core", description: "Moteur de triche et édition mémoire", port: 9023, iconImg: "https://img.icons8.com/color/96/memory-slot.png" }
+      ]
+    },
+    {
+      id: "free-shop", name: "Free Shop", iconImg: "https://img.icons8.com/color/96/shopping-cart.png",
+      description: "Boutiques et téléchargements",
+      links: [
+        { name: "Pegasus-Dl", description: "Téléchargeur Pegasus", port: 6970, iconImg: "https://img.icons8.com/color/96/download.png" },
+        { name: "Spectrum Library", description: "Bibliothèque Spectrum", port: 7575, iconImg: "https://img.icons8.com/color/96/books.png" }
+      ]
+    },
+    {
+      id: "server", name: "Server", iconImg: "https://img.icons8.com/color/96/globe.png",
+      description: "Serveurs web et utilitaires réseau",
+      links: [
+        { name: "Zhttp", description: "Serveur HTTP léger", port: 8888, iconImg: "https://img.icons8.com/color/96/server.png" },
+        { name: "PS5 LocalSend", description: "PS5 LocalSend is a local-network file receiver", port: 53317, iconImg: "https://img.icons8.com/fluency/48/send-file.png" },
+        { name: "websrv", description: "Serveur web local", port: 8080, iconImg: "https://img.icons8.com/color/96/domain.png" }
+      ]
+    },
+    {
+      id: "file-manager", name: "File Manager", iconImg: "https://img.icons8.com/color/96/folder-invoices.png",
+      description: "Gestionnaires de fichiers",
+      links: [
+        { name: "BFpilot", description: "Navigateur et gestionnaire de fichiers", port: 5905, iconImg: "https://img.icons8.com/color/96/folder-invoices.png" },
+        { name: "PS5 Web File Manager", description: "Navigateur et gestionnaire de fichiers", port: 8888, iconImg: "https://img.icons8.com/color/96/folder-invoices.png" },
+        { name: "PS5 File Explorer", description: "Navigateur et gestionnaire de fichiers", port: 5905, iconImg: "https://img.icons8.com/color/96/folder-invoices.png" }
+      ]
+    }
+  ]
+};
+
+let currentView = 'dashboard';
+let activeCategory = null;
+let activeExploitSource = null;
+let downloadDisplayMode = 'detail';
+let downloadFilterType = 'all';
+
+/* ==========================================================================
+   NAVIGATION & GESTION HÔTE
+   ========================================================================== */
+function handleHostChange(select) {
+  const customInput = document.getElementById('custom-host-input');
+  if (select.value === 'custom') {
+    customInput.style.display = 'block';
+    if (customInput.value.trim() !== '') WEBUI.host = customInput.value.trim();
+  } else {
+    customInput.style.display = 'none';
+    WEBUI.host = select.value;
+  }
+}
+
+function updateCustomHost(input) {
+  if (input.value.trim() !== '') WEBUI.host = input.value.trim();
+}
+
+function switchView(viewId, catId = null, exploitId = null) {
+  currentView = viewId;
+  activeCategory = catId;
+  activeExploitSource = exploitId;
+  render();
+}
+
+function renderSidebar() {
+  const nav = document.getElementById('sidebar-nav');
+  let html = `<a class="${currentView === 'dashboard' ? 'active' : ''}" onclick="switchView('dashboard')"><img src="https://img.icons8.com/ios-filled/50/00aaff/home.png"> &nbsp; Dashboard</a>`;
+  html += `<a class="${currentView === 'whats-new' ? 'active' : ''}" onclick="switchView('whats-new')"><img src="https://img.icons8.com/fluency/48/rss.png"> &nbsp; What's new</a>`;
+  html += `<a class="${currentView === 'exploit' ? 'active' : ''}" onclick="switchView('exploit')"><img src="https://img.icons8.com/fluency/48/play-station--v2.png"> &nbsp; Run Exploit</a>`;
+  html += `<a class="${currentView === 'downloads' ? 'active' : ''}" onclick="switchView('downloads')"><img src="https://img.icons8.com/fluency/48/download.png"> &nbsp; Downloads</a>`;
+  
+  WEBUI.categories.forEach(c => {
+    html += `<a class="${currentView === 'category' && activeCategory === c.id ? 'active' : ''}" onclick="switchView('category', '${c.id}')"><img src="${c.iconImg}"> &nbsp; ${c.name}</a>`;
+  });
+  nav.innerHTML = html;
+
+  const creditsBtn = document.getElementById('nav-credits');
+  if (currentView === 'credits') {
+    creditsBtn.style.color = '#fff';
+    creditsBtn.style.background = 'linear-gradient(90deg,#006eff35,#00aaff08)';
+    creditsBtn.style.boxShadow = 'inset 2px 0 var(--blue)';
+  } else {
+    creditsBtn.style.color = '#aebed1';
+    creditsBtn.style.background = 'transparent';
+    creditsBtn.style.boxShadow = 'none';
+  }
+}
+
+/* ==========================================================================
+   MODULE TÉLÉCHARGEMENTS
+   ========================================================================== */
+function setDownloadViewMode(mode) {
+  downloadDisplayMode = mode;
+  fetchDownloadsData();
+}
+
+function setDownloadFilter(filter) {
+  downloadFilterType = filter;
+  fetchDownloadsData();
+}
+
+async function fetchJsonWithFallback(urls) {
+  for (const url of urls) {
+    try {
+      const response = await fetch(url);
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (e) {
+      console.warn("Échec du chargement sur :", url);
+    }
+  }
+  return null;
+}
+
+async function fetchDownloadsData() {
+  const container = document.getElementById('downloads-container');
+  if (!container) return;
+
+  container.innerHTML = `<div style="color:var(--muted); padding:30px; text-align:center;">Chargement des catalogues...</div>`;
+
+  let allItems = [];
+
+  if (downloadFilterType === 'all' || downloadFilterType === 'aio') {
+    allItems = allItems.concat(AIO_PACKS);
+  }
+
+  const extractItems = (data, defaultCat) => {
+    if (!data) return [];
+    let list = [];
+    if (Array.isArray(data)) {
+      list = data;
+    } else if (Array.isArray(data.packages)) {
+      list = data.packages;
+    } else if (Array.isArray(data.pkgs)) {
+      list = data.pkgs;
+    } else if (Array.isArray(data.files)) {
+      list = data.files;
+    } else if (Array.isArray(data.payloads)) {
+      list = data.payloads;
+    } else if (Array.isArray(data.apps)) {
+      list = data.apps;
+    } else if (Array.isArray(data.items)) {
+      list = data.items;
+    }
+
+    return list.map(item => ({
+      ...item,
+      category: item.category || item.cat || defaultCat
+    }));
+  };
+
+  if (downloadFilterType === 'all' || downloadFilterType === 'elf') {
+    const dataElf = await fetchJsonWithFallback(ELF_FALLBACK_URLS);
+    if (dataElf) {
+      allItems = allItems.concat(extractItems(dataElf, 'Payloads ELF'));
+    }
+  }
+
+  if (downloadFilterType === 'all' || downloadFilterType === 'pkg') {
+    const dataPkg = await fetchJsonWithFallback(PKG_FALLBACK_URLS);
+    if (dataPkg) {
+      allItems = allItems.concat(extractItems(dataPkg, 'Applications PKG'));
+    }
+  }
+
+  let html = `
+    <div class="dl-controls">
+      <div class="dl-controls-left">
+        <button class="view-btn ${downloadFilterType === 'all' ? 'active' : ''}" onclick="setDownloadFilter('all')">🌐 Tous</button>
+        <button class="view-btn ${downloadFilterType === 'aio' ? 'active' : ''}" onclick="setDownloadFilter('aio')">📦 Packs AIO</button>
+        <button class="view-btn ${downloadFilterType === 'elf' ? 'active' : ''}" onclick="setDownloadFilter('elf')">⚡ Payloads (ELF)</button>
+        <button class="view-btn ${downloadFilterType === 'pkg' ? 'active' : ''}" onclick="setDownloadFilter('pkg')">🕹️ Applications (PKG)</button>
+      </div>
+      <div class="dl-controls-right">
+        <button class="view-btn ${downloadDisplayMode === 'detail' ? 'active' : ''}" onclick="setDownloadViewMode('detail')">Vue Grille</button>
+        <button class="view-btn ${downloadDisplayMode === 'list' ? 'active' : ''}" onclick="setDownloadViewMode('list')">Vue Liste</button>
+      </div>
+    </div>
+  `;
+
+  if (allItems.length === 0) {
+    html += `<div style="color:var(--muted); padding:30px; text-align:center;">Aucun élément trouvé ou problème de chargement JSON.</div>`;
+    container.innerHTML = html;
+    return;
+  }
+
+  const categoriesMap = {};
+  allItems.forEach(item => {
+    const cat = item.category || "Divers";
+    if (!categoriesMap[cat]) categoriesMap[cat] = [];
+    categoriesMap[cat].push(item);
+  });
+
+  const sortedCategoryNames = Object.keys(categoriesMap).sort((a, b) => {
+    if (a === "Packs AIO") return -1;
+    if (b === "Packs AIO") return 1;
+    return a.localeCompare(b, 'fr', { sensitivity: 'base' });
+  });
+
+  for (const category of sortedCategoryNames) {
+    const items = categoriesMap[category];
+    
+    items.sort((a, b) => {
+      const nameA = a.name || a.title || a.pkg_name || a.filename || "";
+      const nameB = b.name || b.title || b.pkg_name || b.filename || "";
+      return nameA.localeCompare(nameB, 'fr', { sensitivity: 'base' });
+    });
+
+    const containerClass = downloadDisplayMode === 'list' ? 'dl-list' : 'dl-grid';
+
+    html += `
+      <div class="dl-section">
+        <div class="dl-category-title">
+          <span>📁 ${category}</span>
+          <span style="font-size: 13px; color: var(--muted); font-weight: normal;">(${items.length})</span>
+        </div>
+        <div class="${containerClass}">
+    `;
+
+    items.forEach(item => {
+      const title = item.name || item.title || item.pkg_name || item.filename || "Fichier sans nom";
+      const desc = item.description || item.desc || item.pkg_desc || "Aucune description disponible.";
+      const version = item.version || item.ver || item.pkg_ver || "";
+      const url = item.url || item.link || item.downloadUrl || item.pkg_url || item.direct_link || "#";
+
+      html += `
+        <div class="dl-card">
+          <div class="dl-card-header">
+            <span class="dl-card-title">${title}</span>
+            ${version ? `<span class="dl-version">v${version}</span>` : ''}
+          </div>
+          <div class="dl-card-desc">${desc}</div>
+          <div class="dl-actions">
+            <a class="dl-btn dl-btn-primary" href="${url}" download target="_blank" rel="noopener">Télécharger</a>
+            <a class="dl-btn dl-btn-secondary" href="${url}" target="_blank" rel="noopener">Lien Direct</a>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+        </div>
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+}
+
+/* ==========================================================================
+   LECTEUR RSS
+   ========================================================================== */
+async function fetchRepoNews(repoUrl) {
+  try {
+    const cleanUrl = repoUrl.replace(/\/$/, "");
+    const parts = cleanUrl.split("github.com/")[1]?.split("/");
+    if (!parts || parts.length < 2) return [];
+
+    const owner = parts[0];
+    const repo = parts[1];
+    
+    const rssFeedUrl = `https://github.com/${owner}/${repo}/releases.atom`;
+    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssFeedUrl)}`;
+
+    const res = await fetch(apiUrl);
+    if (!res.ok) return [];
+
+    const data = await res.json();
+    if (data.status !== 'ok' || !data.items || data.items.length === 0) return [];
+
+    return data.items.map(item => {
+      let cleanDesc = (item.description || item.content || "").replace(/<[^>]*>?/gm, '').trim();
+      if (cleanDesc.length > 220) cleanDesc = cleanDesc.substring(0, 220) + "...";
+
+      return {
+        title: item.title || `${repo} Nouvelle version`,
+        source: `${owner}/${repo}`,
+        date: new Date(item.pubDate || Date.now()),
+        link: item.link || repoUrl,
+        description: cleanDesc
+      };
+    });
+  } catch (err) {
+    return [];
+  }
+}
+
+async function fetchGlobalFeed() {
+  const container = document.getElementById('rss-articles-container');
+  if (!container) return;
+
+  if (REPOSITORIES.length === 0) {
+    container.innerHTML = `<div style="color:var(--muted); padding:30px; text-align:center;">Aucune URL de dépôt renseignée.</div>`;
+    return;
+  }
+
+  container.innerHTML = `<div style="color:var(--muted); padding:30px; text-align:center;">Chargement des nouveautés...</div>`;
+
+  try {
+    const promises = REPOSITORIES.map(url => fetchRepoNews(url));
+    const results = await Promise.all(promises);
+    let articles = results.flat();
+
+    articles.sort((a, b) => b.date - a.date);
+
+    if (articles.length === 0) {
+      container.innerHTML = `<div style="color:var(--muted); padding:30px; text-align:center;">Aucune version récente trouvée.</div>`;
+      return;
+    }
+
+    const htmlList = articles.map(item => {
+      const dateFormatted = item.date.getTime() > 0 
+        ? item.date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+        : 'Récemment';
+
+      return `
+        <article class="rss-item-card">
+          <div class="rss-item-header">
+            <span class="rss-item-source">${item.source}</span>
+            <span class="rss-item-date">${dateFormatted}</span>
+          </div>
+          <a class="rss-item-title" href="${item.link}" target="_blank" rel="noopener">${item.title}</a>
+          ${item.description ? `<div class="rss-item-desc">${item.description}</div>` : ''}
+          <div class="rss-item-footer">
+            <a class="rss-item-link" href="${item.link}" target="_blank" rel="noopener">Consulter la release sur GitHub →</a>
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    container.innerHTML = `<div class="rss-feed-container">${htmlList}</div>`;
+
+  } catch (err) {
+    container.innerHTML = `<div style="color:#f87171; padding:30px; text-align:center;">Erreur de chargement du flux : ${err.message}</div>`;
+  }
+}
+
+/* ==========================================================================
+   RENDU GLOBAL
+   ========================================================================== */
+function render() {
+  renderSidebar();
+  const container = document.getElementById('main-content');
+  const kicker = document.getElementById('view-kicker');
+  const title = document.getElementById('view-title');
+  const subtitle = document.getElementById('view-subtitle');
+
+  if (currentView === 'dashboard') {
+    kicker.textContent = "evoX ecosystem";
+    title.textContent = "WebUI Manager";
+    subtitle.textContent = "Centralise et lance toutes tes interfaces WebUI locales.";
+    
+    container.className = "grid";
+    
+    const categoriesList = WEBUI.categories;
+    const totalCategories = categoriesList.length;
+    let cols = 3;
+    if (totalCategories === 4 || totalCategories === 8 || totalCategories === 7) cols = 4;
+
+    container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    container.innerHTML = categoriesList.map((c, index) => `
+      <article class="card" onclick="switchView('category', '${c.id}')" style="cursor:pointer; animation-delay: ${index * 0.05}s;">
+        <span class="count">${c.links.length} lien${c.links.length > 1 ? 's' : ''}</span>
+        <div class="icon"><img src="${c.iconImg}" alt=""></div>
+        <h2>${c.name}</h2>
+        <div class="desc">${c.description}</div>
+        <div class="open">Explorer →</div>
+      </article>
+    `).join('');
+
+  } else if (currentView === 'downloads') {
+    kicker.textContent = "Centre de téléchargement";
+    title.textContent = "Downloads";
+    subtitle.textContent = "Télécharge tes packs AIO, payloads (ELF) et applications (PKG) triés par catégories.";
+
+    container.className = "";
+    container.innerHTML = `<div id="downloads-container"></div>`;
+    fetchDownloadsData();
+
+  } else if (currentView === 'whats-new') {
+    kicker.textContent = "Flux Releases GitHub";
+    title.textContent = "What's new";
+    subtitle.textContent = "Dernières releases des dépôts suivis (du plus récent au plus ancien).";
+
+    container.className = "";
+    container.innerHTML = `<div id="rss-articles-container"></div>`;
+    fetchGlobalFeed();
+
+  } else if (currentView === 'exploit') {
+    if (!activeExploitSource) {
+      kicker.textContent = "Exécution WebKit";
+      title.textContent = "Run Exploit";
+      subtitle.textContent = "Choisis la source d'exploit WebKit à exécuter.";
+
+      container.className = "grid";
+      const totalSources = EXPLOIT_SOURCES.length;
+      let cols = 3;
+      if (totalSources === 4 || totalSources === 8 || totalSources === 7) cols = 4;
+      container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+      container.innerHTML = EXPLOIT_SOURCES.map((s, index) => `
+        <article class="card" onclick="switchView('exploit', null, '${s.id}')" style="cursor:pointer; animation-delay: ${index * 0.05}s;">
+          <span class="count">WebKit</span>
+          <div class="icon avatar-icon"><img src="${s.iconImg}" alt="${s.name}"></div>
+          <h2>${s.name}</h2>
+          <div class="desc">${s.description}</div>
+          <div class="open">Lancer →</div>
+        </article>
+      `).join('');
+    } else {
+      const source = EXPLOIT_SOURCES.find(s => s.id === activeExploitSource);
+      if (!source) return switchView('exploit');
+
+      kicker.textContent = "Exécution WebKit";
+      title.textContent = source.name;
+      subtitle.textContent = source.description;
+
+      container.className = "";
+      container.innerHTML = `
+        <div style="margin-bottom: 15px;">
+          <button onclick="switchView('exploit')" style="background: #007bff12; border: 1px solid var(--blue); color: #fff; padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; transition: 0.2s;">
+            ← Changer de source
+          </button>
+        </div>
+        <div style="width: 100%; height: calc(100vh - 250px); border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #000;">
+          <iframe src="${source.url}" style="width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
+        </div>
+      `;
+    }
+
+  } else if (currentView === 'category') {
+    const cat = WEBUI.categories.find(c => c.id === activeCategory);
+    if (!cat) return switchView('dashboard');
+
+    kicker.textContent = "Catégorie";
+    title.textContent = cat.name;
+    subtitle.textContent = cat.description;
+
+    container.className = "grid";
+    const totalLinks = cat.links.length;
+    let cols = 3;
+    if (totalLinks === 4 || totalLinks === 8 || totalLinks === 7) cols = 4;
+    container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+    container.innerHTML = cat.links.map((l, index) => {
+      const targetUrl = l.url || (l.port !== null ? `http://${WEBUI.host}:${l.port}` : '#');
+      const hasLink = l.url || l.port !== null;
+      const badgeText = l.url ? 'URL Directe' : (l.port ? `Port : ${l.port}` : 'Non disponible');
+      
+      return `
+        <article class="card" ${hasLink ? `onclick="window.open('${targetUrl}', '_blank')"` : ''} style="${hasLink ? 'cursor:pointer;' : 'opacity:0.6;'} animation-delay: ${index * 0.05}s;">
+          <span class="count" style="${hasLink ? '' : 'color:#f87171; border-color:#7f1d1d;'}">${badgeText}</span>
+          <div class="icon"><img src="${l.iconImg}" alt=""></div>
+          <h2>${l.name}</h2>
+          <div class="desc">${l.description}</div>
+          ${hasLink ? `<a class="open" href="${targetUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Ouvrir →</a>` : `<div class="open" style="border-color:#475569; color:#94a3b8; background:transparent;">Non disponible</div>`}
+        </article>
+      `;
+    }).join('');
+
+  } else if (currentView === 'credits') {
+    kicker.textContent = "À propos";
+    title.textContent = "Crédits";
+    subtitle.textContent = "Développeurs et contributeurs du projet.";
+
+    container.className = "credits-grid";
+    container.style.gridTemplateColumns = "";
+    container.innerHTML = `
+      <a class="credit-card" href="https://x.com/nexgen999" target="_blank" rel="noopener" style="animation-delay: 0s;">
+        <img class="avatar" src="https://pbs.twimg.com/profile_images/2037201736910213120/p9wyelOV_400x400.jpg" alt="nexgen999">
+        <div class="credit-info">
+          <h3>nexgen999</h3>
+          <p>Développeur principal & Concepteur de l'écosystème</p>
+          <span class="credit-role">@nexgen999</span>
+        </div>
+      </a>
+      <a class="credit-card" href="https://x.com/MikeleMedia" target="_blank" rel="noopener" style="animation-delay: 0.08s;">
+        <img class="avatar" src="https://pbs.twimg.com/profile_images/2076330418383581184/_OMprq4c_400x400.jpg" alt="Michele Media">
+        <div class="credit-info">
+          <h3>Michele Media</h3>
+          <p>Développeur & Support technique & Concepteur de l'eboot</p>
+          <span class="credit-role">@MikeleMedia</span>
+        </div>
+      </a>
+    `;
+  }
+}
+
+render();
+</script>
+</body>
+</html>
