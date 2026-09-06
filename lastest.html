@@ -175,7 +175,7 @@ main {
 }
 
 /* ==========================================================================
-   2. COMPOSANTS DASHBOARD & CARTES AVEC COMPATIBILITÉ ICONES
+   2. COMPOSANTS DASHBOARD & CARTES
    ========================================================================== */
 .grid {
   display: grid;
@@ -246,7 +246,6 @@ main {
   filter: drop-shadow(0 0 4px #00aaff);
 }
 
-/* STYLE BULLE RONDE SPECIFIQUE POUR LES AVATARS EXPLOIT / TWITTER */
 .icon.avatar-icon {
   border-radius: 50%;
   border: 2px solid var(--blue);
@@ -289,8 +288,207 @@ main {
 }
 
 /* ==========================================================================
-   3. LECTEUR RSS STYLE FRESHRSS
+   3. STYLES DOWNLOADS & PAYLOADS
    ========================================================================== */
+.dl-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 14px;
+  flex-wrap: wrap;
+}
+
+.dl-controls-left, .dl-controls-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.view-btn {
+  background: #030a14;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.view-btn.active, .view-btn:hover {
+  background: #007bff25;
+  border-color: var(--blue);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 170, 255, 0.2);
+}
+
+.dl-section {
+  margin-bottom: 35px;
+}
+
+.dl-category-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--blue);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.dl-grid .dl-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.dl-grid .dl-card:hover {
+  border-color: var(--blue);
+  transform: translateY(-3px);
+  background: var(--panel2);
+}
+
+.dl-grid .dl-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.dl-grid .dl-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  word-break: break-word;
+}
+
+.dl-grid .dl-card-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.dl-grid .dl-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.dl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dl-list .dl-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.dl-list .dl-card:hover {
+  border-color: var(--blue);
+  background: var(--panel2);
+}
+
+.dl-list .dl-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.dl-list .dl-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.dl-list .dl-card-desc {
+  display: none;
+}
+
+.dl-list .dl-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.dl-version {
+  font-size: 11px;
+  background: rgba(0, 170, 255, 0.15);
+  color: var(--blue);
+  border: 1px solid rgba(0, 170, 255, 0.3);
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dl-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: .2s ease;
+  display: inline-block;
+  text-align: center;
+}
+
+.dl-btn-primary {
+  background: var(--blue);
+  color: #000;
+  border: none;
+}
+
+.dl-btn-primary:hover {
+  background: #33bbff;
+  box-shadow: 0 0 10px rgba(0, 170, 255, 0.4);
+}
+
+.dl-btn-secondary {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--line);
+}
+
+.dl-btn-secondary:hover {
+  border-color: var(--blue);
+  color: #fff;
+}
+
+/* RSS STYLE */
 .rss-feed-container {
   display: flex;
   flex-direction: column;
@@ -340,9 +538,7 @@ main {
 .rss-item-link { font-size: 12px; color: var(--blue); text-decoration: none; font-weight: 600; }
 .rss-item-link:hover { text-decoration: underline; }
 
-/* ==========================================================================
-   4. CRÉDITS ET FOOTER
-   ========================================================================== */
+/* CRÉDITS */
 .credits-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 900px; }
 .credit-card { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 35px 25px; text-decoration: none; color: var(--text); border-radius: 24px; }
 .avatar { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--blue); background: #071c30; margin-bottom: 20px; box-shadow: 0 8px 25px #00000088; transition: transform 0.3s ease; }
@@ -360,6 +556,8 @@ footer { color: #526a83; text-align: center; margin-top: 38px; font-size: 12px; 
   .nav a img { width: 20px; height: 20px; }
   .grid { grid-template-columns: repeat(2, 1fr); }
   .credits-grid { grid-template-columns: 1fr; }
+  .dl-controls { flex-direction: column; align-items: stretch; }
+  .dl-controls-left, .dl-controls-right { justify-content: center; }
 }
 
 @media(max-width:600px) {
@@ -412,7 +610,7 @@ footer { color: #526a83; text-align: center; margin-top: 38px; font-size: 12px; 
 
 <script>
 /* ==========================================================================
-   BLOC SOURCES DEPO : AJOUTE TES URLS GITHUB ICI
+   SOURCES REPOSITORIES ET DOWNLOADS
    ========================================================================== */
 const REPOSITORIES = [
   "https://github.com/notmaj0r/ProsperoMgr",
@@ -424,8 +622,38 @@ const REPOSITORIES = [
   "https://github.com/itsPLK/ps5-unified-autoloader"
 ];
 
+const PKG_FALLBACK_URLS = [
+  "https://nexgen999.github.io/PS5-Super-PLDMGR-Auto-Updater/PKGjson/pkg.json",
+  "https://raw.githubusercontent.com/nexgen999/PS5-Super-PLDMGR-Auto-Updater/main/PKGjson/pkg.json",
+  "https://cdn.jsdelivr.net/gh/nexgen999/PS5-Super-PLDMGR-Auto-Updater@main/PKGjson/pkg.json",
+  "https://corsproxy.io/?" + encodeURIComponent("https://raw.githubusercontent.com/nexgen999/PS5-Super-PLDMGR-Auto-Updater/main/PKGjson/pkg.json")
+];
+
+const ELF_FALLBACK_URLS = [
+  "https://nexgen999.github.io/PS5-Super-PLDMGR-Auto-Updater/json/payloads.json",
+  "https://raw.githubusercontent.com/nexgen999/PS5-Super-PLDMGR-Auto-Updater/main/json/payloads.json",
+  "https://cdn.jsdelivr.net/gh/nexgen999/PS5-Super-PLDMGR-Auto-Updater@main/json/payloads.json"
+];
+
+const AIO_PACKS = [
+  {
+    title: "PS5 Super PLDMGR Auto Updated (Offline AIO)",
+    version: "Latest",
+    desc: "Pack AIO complet pré-configuré pour une mise à jour hors-ligne.",
+    url: "https://github.com/nexgen999/PS5-Super-PLDMGR-Auto-Updater/releases/download/latest/ps5_super_pldmgr_auto_updated_offline.aio_latest.zip",
+    category: "Packs AIO"
+  },
+  {
+    title: "PS5 PKG AIO",
+    version: "Latest",
+    desc: "Archive regroupant l'ensemble des paquets PKG essentiels.",
+    url: "https://github.com/nexgen999/PS5-Super-PLDMGR-Auto-Updater/releases/download/latest/PS5PKG_aio_latest.zip",
+    category: "Packs AIO"
+  }
+];
+
 /* ==========================================================================
-   CONFIGURATIONS GLOBALES AVEC ICONES ICONS8 ET AVATARS TWITTER
+   CONFIGURATIONS GLOBALES
    ========================================================================== */
 const EXPLOIT_SOURCES = [
   {
@@ -523,9 +751,11 @@ const WEBUI = {
 let currentView = 'dashboard';
 let activeCategory = null;
 let activeExploitSource = null;
+let downloadDisplayMode = 'detail';
+let downloadFilterType = 'all';
 
 /* ==========================================================================
-   NAVIGATION ET INTERFACE
+   NAVIGATION & GESTION HÔTE
    ========================================================================== */
 function handleHostChange(select) {
   const customInput = document.getElementById('custom-host-input');
@@ -554,6 +784,7 @@ function renderSidebar() {
   let html = `<a class="${currentView === 'dashboard' ? 'active' : ''}" onclick="switchView('dashboard')"><img src="https://img.icons8.com/ios-filled/50/00aaff/home.png"> &nbsp; Dashboard</a>`;
   html += `<a class="${currentView === 'whats-new' ? 'active' : ''}" onclick="switchView('whats-new')"><img src="https://img.icons8.com/fluency/48/rss.png"> &nbsp; What's new</a>`;
   html += `<a class="${currentView === 'exploit' ? 'active' : ''}" onclick="switchView('exploit')"><img src="https://img.icons8.com/fluency/48/play-station--v2.png"> &nbsp; Run Exploit</a>`;
+  html += `<a class="${currentView === 'downloads' ? 'active' : ''}" onclick="switchView('downloads')"><img src="https://img.icons8.com/fluency/48/download.png"> &nbsp; Downloads</a>`;
   
   WEBUI.categories.forEach(c => {
     html += `<a class="${currentView === 'category' && activeCategory === c.id ? 'active' : ''}" onclick="switchView('category', '${c.id}')"><img src="${c.iconImg}"> &nbsp; ${c.name}</a>`;
@@ -570,6 +801,168 @@ function renderSidebar() {
     creditsBtn.style.background = 'transparent';
     creditsBtn.style.boxShadow = 'none';
   }
+}
+
+/* ==========================================================================
+   MODULE TÉLÉCHARGEMENTS
+   ========================================================================== */
+function setDownloadViewMode(mode) {
+  downloadDisplayMode = mode;
+  fetchDownloadsData();
+}
+
+function setDownloadFilter(filter) {
+  downloadFilterType = filter;
+  fetchDownloadsData();
+}
+
+async function fetchJsonWithFallback(urls) {
+  for (const url of urls) {
+    try {
+      const response = await fetch(url);
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (e) {
+      console.warn("Échec du chargement sur :", url);
+    }
+  }
+  return null;
+}
+
+async function fetchDownloadsData() {
+  const container = document.getElementById('downloads-container');
+  if (!container) return;
+
+  container.innerHTML = `<div style="color:var(--muted); padding:30px; text-align:center;">Chargement des catalogues...</div>`;
+
+  let allItems = [];
+
+  if (downloadFilterType === 'all' || downloadFilterType === 'aio') {
+    allItems = allItems.concat(AIO_PACKS);
+  }
+
+  const extractItems = (data, defaultCat) => {
+    if (!data) return [];
+    let list = [];
+    if (Array.isArray(data)) {
+      list = data;
+    } else if (Array.isArray(data.packages)) {
+      list = data.packages;
+    } else if (Array.isArray(data.pkgs)) {
+      list = data.pkgs;
+    } else if (Array.isArray(data.files)) {
+      list = data.files;
+    } else if (Array.isArray(data.payloads)) {
+      list = data.payloads;
+    } else if (Array.isArray(data.apps)) {
+      list = data.apps;
+    } else if (Array.isArray(data.items)) {
+      list = data.items;
+    }
+
+    return list.map(item => ({
+      ...item,
+      category: item.category || item.cat || defaultCat
+    }));
+  };
+
+  if (downloadFilterType === 'all' || downloadFilterType === 'elf') {
+    const dataElf = await fetchJsonWithFallback(ELF_FALLBACK_URLS);
+    if (dataElf) {
+      allItems = allItems.concat(extractItems(dataElf, 'Payloads ELF'));
+    }
+  }
+
+  if (downloadFilterType === 'all' || downloadFilterType === 'pkg') {
+    const dataPkg = await fetchJsonWithFallback(PKG_FALLBACK_URLS);
+    if (dataPkg) {
+      allItems = allItems.concat(extractItems(dataPkg, 'Applications PKG'));
+    }
+  }
+
+  let html = `
+    <div class="dl-controls">
+      <div class="dl-controls-left">
+        <button class="view-btn ${downloadFilterType === 'all' ? 'active' : ''}" onclick="setDownloadFilter('all')">🌐 Tous</button>
+        <button class="view-btn ${downloadFilterType === 'aio' ? 'active' : ''}" onclick="setDownloadFilter('aio')">📦 Packs AIO</button>
+        <button class="view-btn ${downloadFilterType === 'elf' ? 'active' : ''}" onclick="setDownloadFilter('elf')">⚡ Payloads (ELF)</button>
+        <button class="view-btn ${downloadFilterType === 'pkg' ? 'active' : ''}" onclick="setDownloadFilter('pkg')">🕹️ Applications (PKG)</button>
+      </div>
+      <div class="dl-controls-right">
+        <button class="view-btn ${downloadDisplayMode === 'detail' ? 'active' : ''}" onclick="setDownloadViewMode('detail')">Vue Grille</button>
+        <button class="view-btn ${downloadDisplayMode === 'list' ? 'active' : ''}" onclick="setDownloadViewMode('list')">Vue Liste</button>
+      </div>
+    </div>
+  `;
+
+  if (allItems.length === 0) {
+    html += `<div style="color:var(--muted); padding:30px; text-align:center;">Aucun élément trouvé ou problème de chargement JSON.</div>`;
+    container.innerHTML = html;
+    return;
+  }
+
+  const categoriesMap = {};
+  allItems.forEach(item => {
+    const cat = item.category || "Divers";
+    if (!categoriesMap[cat]) categoriesMap[cat] = [];
+    categoriesMap[cat].push(item);
+  });
+
+  const sortedCategoryNames = Object.keys(categoriesMap).sort((a, b) => {
+    if (a === "Packs AIO") return -1;
+    if (b === "Packs AIO") return 1;
+    return a.localeCompare(b, 'fr', { sensitivity: 'base' });
+  });
+
+  for (const category of sortedCategoryNames) {
+    const items = categoriesMap[category];
+    
+    items.sort((a, b) => {
+      const nameA = a.name || a.title || a.pkg_name || a.filename || "";
+      const nameB = b.name || b.title || b.pkg_name || b.filename || "";
+      return nameA.localeCompare(nameB, 'fr', { sensitivity: 'base' });
+    });
+
+    const containerClass = downloadDisplayMode === 'list' ? 'dl-list' : 'dl-grid';
+
+    html += `
+      <div class="dl-section">
+        <div class="dl-category-title">
+          <span>📁 ${category}</span>
+          <span style="font-size: 13px; color: var(--muted); font-weight: normal;">(${items.length})</span>
+        </div>
+        <div class="${containerClass}">
+    `;
+
+    items.forEach(item => {
+      const title = item.name || item.title || item.pkg_name || item.filename || "Fichier sans nom";
+      const desc = item.description || item.desc || item.pkg_desc || "Aucune description disponible.";
+      const version = item.version || item.ver || item.pkg_ver || "";
+      const url = item.url || item.link || item.downloadUrl || item.pkg_url || item.direct_link || "#";
+
+      html += `
+        <div class="dl-card">
+          <div class="dl-card-header">
+            <span class="dl-card-title">${title}</span>
+            ${version ? `<span class="dl-version">v${version}</span>` : ''}
+          </div>
+          <div class="dl-card-desc">${desc}</div>
+          <div class="dl-actions">
+            <a class="dl-btn dl-btn-primary" href="${url}" download target="_blank" rel="noopener">Télécharger</a>
+            <a class="dl-btn dl-btn-secondary" href="${url}" target="_blank" rel="noopener">Lien Direct</a>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+        </div>
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
 }
 
 /* ==========================================================================
@@ -615,11 +1008,11 @@ async function fetchGlobalFeed() {
   if (!container) return;
 
   if (REPOSITORIES.length === 0) {
-    container.innerHTML = `<div style="color:var(--muted); padding:30px; text-align:center;">Aucune URL de dépôt renseignée dans le tableau REPOSITORIES.</div>`;
+    container.innerHTML = `<div style="color:var(--muted); padding:30px; text-align:center;">Aucune URL de dépôt renseignée.</div>`;
     return;
   }
 
-  container.innerHTML = `<div style="color:var(--muted); padding:30px; text-align:center;">Chargement des nouveautés depuis ${REPOSITORIES.length} dépôt(s)...</div>`;
+  container.innerHTML = `<div style="color:var(--muted); padding:30px; text-align:center;">Chargement des nouveautés...</div>`;
 
   try {
     const promises = REPOSITORIES.map(url => fetchRepoNews(url));
@@ -629,7 +1022,7 @@ async function fetchGlobalFeed() {
     articles.sort((a, b) => b.date - a.date);
 
     if (articles.length === 0) {
-      container.innerHTML = `<div style="color:var(--muted); padding:30px; text-align:center;">Aucune version récente trouvée sur les dépôts configurés.</div>`;
+      container.innerHTML = `<div style="color:var(--muted); padding:30px; text-align:center;">Aucune version récente trouvée.</div>`;
       return;
     }
 
@@ -676,12 +1069,14 @@ function render() {
     subtitle.textContent = "Centralise et lance toutes tes interfaces WebUI locales.";
     
     container.className = "grid";
-    const totalCategories = WEBUI.categories.length;
+    
+    const categoriesList = WEBUI.categories;
+    const totalCategories = categoriesList.length;
     let cols = 3;
     if (totalCategories === 4 || totalCategories === 8 || totalCategories === 7) cols = 4;
 
     container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-    container.innerHTML = WEBUI.categories.map((c, index) => `
+    container.innerHTML = categoriesList.map((c, index) => `
       <article class="card" onclick="switchView('category', '${c.id}')" style="cursor:pointer; animation-delay: ${index * 0.05}s;">
         <span class="count">${c.links.length} lien${c.links.length > 1 ? 's' : ''}</span>
         <div class="icon"><img src="${c.iconImg}" alt=""></div>
@@ -690,6 +1085,15 @@ function render() {
         <div class="open">Explorer →</div>
       </article>
     `).join('');
+
+  } else if (currentView === 'downloads') {
+    kicker.textContent = "Centre de téléchargement";
+    title.textContent = "Downloads";
+    subtitle.textContent = "Télécharge tes packs AIO, payloads (ELF) et applications (PKG) triés par catégories.";
+
+    container.className = "";
+    container.innerHTML = `<div id="downloads-container"></div>`;
+    fetchDownloadsData();
 
   } else if (currentView === 'whats-new') {
     kicker.textContent = "Flux Releases GitHub";
