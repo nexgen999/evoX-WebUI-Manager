@@ -6,7 +6,7 @@
 <title>evoX WebUI Manager</title>
 <style>
 /* ==========================================================================
-   1. STYLES DE BASE ET LAYOUT PC
+   1. STYLES DE BASE ET LAYOUT PC / PS5
    ========================================================================== */
 :root {
   --bg: #020711;
@@ -28,7 +28,7 @@ html, body {
   font-family: Inter, Segoe UI, Arial, sans-serif;
   color: var(--text);
   background: var(--bg);
-  overflow: hidden; /* Empêche le défilement global de la page */
+  overflow: hidden;
 }
 
 body {
@@ -52,7 +52,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  overflow-y: auto; /* Permet à la sidebar de défiler si l'écran est très petit */
+  overflow-y: auto;
 }
 
 .logo {
@@ -83,6 +83,12 @@ body {
   transition: .2s;
   cursor: pointer;
   font-size: 14px;
+}
+
+.nav a img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 .nav a:hover, .nav a.active {
@@ -128,10 +134,10 @@ body {
 
 .host-config input { margin-top: 6px; }
 
-/* CONTENU PRINCIPAL INDÉPENDANT ET DÉFILANT */
+/* CONTENU PRINCIPAL */
 main {
   height: 100vh;
-  overflow-y: auto; /* Seul le contenu de droite défile */
+  overflow-y: auto;
   padding: 30px clamp(20px, 4vw, 55px);
   width: 100%;
 }
@@ -169,7 +175,7 @@ main {
 }
 
 /* ==========================================================================
-   2. COMPOSANTS DASHBOARD & CARTES
+   2. COMPOSANTS DASHBOARD & CARTES AVEC COMPATIBILITÉ ICONES
    ========================================================================== */
 .grid {
   display: grid;
@@ -228,9 +234,16 @@ main {
   border-radius: 15px;
   background: #071c30;
   border: 1px solid #1477b9;
-  font-size: 26px;
   margin-bottom: 22px;
+  overflow: hidden;
   transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.icon img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 4px #00aaff);
 }
 
 .card:hover .icon {
@@ -262,7 +275,7 @@ main {
 }
 
 /* ==========================================================================
-   3. LECTEUR RSS STYLE FRESHRSS (LISTE VERTICALE)
+   3. LECTEUR RSS STYLE FRESHRSS
    ========================================================================== */
 .rss-feed-container {
   display: flex;
@@ -305,43 +318,13 @@ main {
   border: 1px solid rgba(0, 170, 255, 0.2);
 }
 
-.rss-item-date {
-  color: var(--muted);
-}
-
-.rss-item-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
-  text-decoration: none;
-  line-height: 1.3;
-}
-
-.rss-item-title:hover {
-  color: var(--blue);
-}
-
-.rss-item-desc {
-  font-size: 13px;
-  color: #aebed1;
-  line-height: 1.5;
-  word-break: break-word;
-}
-
-.rss-item-footer {
-  margin-top: 4px;
-}
-
-.rss-item-link {
-  font-size: 12px;
-  color: var(--blue);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.rss-item-link:hover {
-  text-decoration: underline;
-}
+.rss-item-date { color: var(--muted); }
+.rss-item-title { font-size: 18px; font-weight: 700; color: #fff; text-decoration: none; line-height: 1.3; }
+.rss-item-title:hover { color: var(--blue); }
+.rss-item-desc { font-size: 13px; color: #aebed1; line-height: 1.5; word-break: break-word; }
+.rss-item-footer { margin-top: 4px; }
+.rss-item-link { font-size: 12px; color: var(--blue); text-decoration: none; font-weight: 600; }
+.rss-item-link:hover { text-decoration: underline; }
 
 /* ==========================================================================
    4. CRÉDITS ET FOOTER
@@ -360,7 +343,7 @@ footer { color: #526a83; text-align: center; margin-top: 38px; font-size: 12px; 
   .app { grid-template-columns: 75px 1fr; }
   .logo { font-size: 22px; padding: 10px 8px 25px; }
   .nav a { justify-content: center; font-size: 0; }
-  .nav a:first-letter { font-size: 18px; }
+  .nav a img { width: 20px; height: 20px; }
   .grid { grid-template-columns: repeat(2, 1fr); }
   .credits-grid { grid-template-columns: 1fr; }
 }
@@ -392,7 +375,7 @@ footer { color: #526a83; text-align: center; margin-top: 38px; font-size: 12px; 
       </select>
       <input type="text" id="custom-host-input" placeholder="Ex: 192.168.1.50" style="display:none;" oninput="updateCustomHost(this)">
     </div>
-    <a style="display:flex;gap:13px;align-items:center;color:#aebed1;text-decoration:none;padding:11px 15px;border-radius:12px;cursor:pointer;transition:.2s;font-size:14px;" id="nav-credits" onclick="switchView('credits')">★ &nbsp; Crédits</a>
+    <a style="display:flex;gap:13px;align-items:center;color:#aebed1;text-decoration:none;padding:11px 15px;border-radius:12px;cursor:pointer;transition:.2s;font-size:14px;" id="nav-credits" onclick="switchView('credits')"><img src="https://img.icons8.com/ios-filled/50/00aaff/star.png" style="width:16px;height:16px;"> &nbsp; Crédits</a>
   </div>
 </aside>
 
@@ -408,14 +391,14 @@ footer { color: #526a83; text-align: center; margin-top: 38px; font-size: 12px; 
 
     <section id="main-content"></section>
 
-    <footer>evoX WebUI Manager · PC Edition</footer>
+    <footer>evoX WebUI Manager · PS5 Edition</footer>
   </div>
 </main>
 </div>
 
 <script>
 /* ==========================================================================
-   BLOC SOURCES DEPO : AJOUTE TES URLS GITHUB ICI (LIGNE PAR LIGNE)
+   BLOC SOURCES DEPO : AJOUTE TES URLS GITHUB ICI
    ========================================================================== */
 const REPOSITORIES = [
   "https://github.com/notmaj0r/ProsperoMgr",
@@ -428,7 +411,7 @@ const REPOSITORIES = [
 ];
 
 /* ==========================================================================
-   CONFIGURATIONS GLOBALES
+   CONFIGURATIONS GLOBALES AVEC ICONES ICONS8 COMPATIBLES PS5
    ========================================================================== */
 const EXPLOIT_URL = "https://nexgen999.github.io/ps5webkit/index.html";
 
@@ -436,66 +419,66 @@ const WEBUI = {
   host: "127.0.0.1",
   categories: [
     {
-      id: "hen", name: "HEN", icon: "⚡",
+      id: "hen", name: "HEN", iconImg: "https://img.icons8.com/color/96/lightning-bolt.png",
       description: "Interfaces HEN et gestion du système",
       links: [
-        { name: "PLDMGR", description: "Payload Manager", port: 8084, icon: "⚡" },
-        { name: "EvoX", description: "Interface EvoX principale", port: 8085, icon: "⚡" },
-        { name: "Prospero Manager", description: "Gestion système Prospero", port: 7070, icon: "⚡" },
-        { name: "Pizza-Hen Toolbox", description: "Pizza-Hen", port: 8080, icon: "⚡" },
-        { name: "Elf-Arsenal", description: "Boîte à outils ELF", port: 6969, icon: "⚡" },
-        { name: "Voidshell", description: "Shell système", port: 7007, icon: "⚡" },
-        { name: "Kura", description: "Interface Kura", port: 8535, icon: "⚡" }
+        { name: "PLDMGR", description: "Payload Manager", port: 8084, iconImg: "https://img.icons8.com/color/96/lightning-bolt.png" },
+        { name: "EvoX", description: "Interface EvoX principale", port: 8085, iconImg: "https://img.icons8.com/color/96/lightning-bolt.png" },
+        { name: "Prospero Manager", description: "Gestion système Prospero", port: 7070, iconImg: "https://img.icons8.com/color/96/lightning-bolt.png" },
+        { name: "Pizza-Hen Toolbox", description: "Pizza-Hen", port: 8080, iconImg: "https://img.icons8.com/color/96/lightning-bolt.png" },
+        { name: "Elf-Arsenal", description: "Boîte à outils ELF", port: 6969, iconImg: "https://img.icons8.com/color/96/lightning-bolt.png" },
+        { name: "Voidshell", description: "Shell système", port: 7007, iconImg: "https://img.icons8.com/color/96/lightning-bolt.png" },
+        { name: "Kura", description: "Interface Kura", port: 8535, iconImg: "https://img.icons8.com/color/96/lightning-bolt.png" }
       ]
     },
     {
-      id: "game-management", name: "Game Management", icon: "🎮",
+      id: "game-management", name: "Game Management", iconImg: "https://img.icons8.com/color/96/controller.png",
       description: "Gestion des jeux et montage",
       links: [
-        { name: "Game Compressor", description: "Compression et gestion des ROMs/jeux", port: 5910, icon: "🎮" },
-        { name: "ShadowMountPlus", description: "Montage avancé de jeux", port: 10101, icon: "🎮" }
+        { name: "Game Compressor", description: "Compression et gestion des ROMs/jeux", port: 5910, iconImg: "https://img.icons8.com/color/96/compress.png" },
+        { name: "ShadowMountPlus", description: "Montage avancé de jeux", port: 10101, iconImg: "https://img.icons8.com/color/96/hdd.png" }
       ]
     },
     {
-      id: "Save", name: "Saves Management", icon: "💾",
+      id: "Save", name: "Saves Management", iconImg: "https://img.icons8.com/color/96/save.png",
       description: "Gestion des sauvegardes",
       links: [
-        { name: "Garlic SaveMgr", description: "Compression et gestion des sauvegardes", port: 8082, icon: "💾" },
-        { name: "Garlic Saves", description: "Site web officiel", url: "https://garlicsaves.com", icon: "💾" }
+        { name: "Garlic SaveMgr", description: "Compression et gestion des sauvegardes", port: 8082, iconImg: "https://img.icons8.com/color/96/save.png" },
+        { name: "Garlic Saves", description: "Site web officiel", url: "https://garlicsaves.com", iconImg: "https://img.icons8.com/color/96/cloud-checked.png" }
       ]
     },
     {
-      id: "cheat", name: "Cheat", icon: "🎯",
+      id: "cheat", name: "Cheat", iconImg: "https://img.icons8.com/color/96/trophy.png",
       description: "Outils de triche et modification",
       links: [
-        { name: "CheatRunner", description: "Moteur de triche et édition mémoire", port: 9999, icon: "🎯" },
-        { name: "Kyline Core", description: "Moteur de triche et édition mémoire", port: 9023, icon: "🎯" }
+        { name: "CheatRunner", description: "Moteur de triche et édition mémoire", port: 9999, iconImg: "https://img.icons8.com/color/96/trophy.png" },
+        { name: "Kyline Core", description: "Moteur de triche et édition mémoire", port: 9023, iconImg: "https://img.icons8.com/color/96/memory-slot.png" }
       ]
     },
     {
-      id: "free-shop", name: "Free Shop", icon: "🛒",
+      id: "free-shop", name: "Free Shop", iconImg: "https://img.icons8.com/color/96/shopping-cart.png",
       description: "Boutiques et téléchargements",
       links: [
-        { name: "Pegasus-Dl", description: "Téléchargeur Pegasus", port: 6970, icon: "🛒" },
-        { name: "Spectrum Library", description: "Bibliothèque Spectrum", port: 7575, icon: "🛒" }
+        { name: "Pegasus-Dl", description: "Téléchargeur Pegasus", port: 6970, iconImg: "https://img.icons8.com/color/96/download.png" },
+        { name: "Spectrum Library", description: "Bibliothèque Spectrum", port: 7575, iconImg: "https://img.icons8.com/color/96/books.png" }
       ]
     },
     {
-      id: "server", name: "Server", icon: "🌐",
+      id: "server", name: "Server", iconImg: "https://img.icons8.com/color/96/globe.png",
       description: "Serveurs web et utilitaires réseau",
       links: [
-        { name: "Zhttp", description: "Serveur HTTP léger", port: 8888, icon: "🌐" },
-        { name: "PS5 LocalSend", description: "PS5 LocalSend is a local-network file receiver", port: 53317, icon: "🌐" },
-        { name: "websrv", description: "Serveur web local", port: 8080, icon: "🌐" }
+        { name: "Zhttp", description: "Serveur HTTP léger", port: 8888, iconImg: "https://img.icons8.com/color/96/server.png" },
+        { name: "PS5 LocalSend", description: "PS5 LocalSend is a local-network file receiver", port: 53317, iconImg: "https://img.icons8.com/fluency/48/send-file.png" },
+        { name: "websrv", description: "Serveur web local", port: 8080, iconImg: "https://img.icons8.com/color/96/domain.png" }
       ]
     },
     {
-      id: "file-manager", name: "File Manager", icon: "📁",
+      id: "file-manager", name: "File Manager", iconImg: "https://img.icons8.com/color/96/folder-invoices.png",
       description: "Gestionnaires de fichiers",
       links: [
-        { name: "BFpilot", description: "Navigateur et gestionnaire de fichiers", port: 5905, icon: "📁" },
-        { name: "PS5 Web File Manager", description: "Navigateur et gestionnaire de fichiers", port: 8888, icon: "📁" },
-        { name: "PS5 File Explorer", description: "Navigateur et gestionnaire de fichiers", port: 5905, icon: "📁" }
+        { name: "BFpilot", description: "Navigateur et gestionnaire de fichiers", port: 5905, iconImg: "https://img.icons8.com/color/96/folder-invoices.png" },
+        { name: "PS5 Web File Manager", description: "Navigateur et gestionnaire de fichiers", port: 8888, iconImg: "https://img.icons8.com/color/96/folder-invoices.png" },
+        { name: "PS5 File Explorer", description: "Navigateur et gestionnaire de fichiers", port: 5905, iconImg: "https://img.icons8.com/color/96/folder-invoices.png" }
       ]
     }
   ]
@@ -530,12 +513,12 @@ function switchView(viewId, catId = null) {
 
 function renderSidebar() {
   const nav = document.getElementById('sidebar-nav');
-  let html = `<a class="${currentView === 'dashboard' ? 'active' : ''}" onclick="switchView('dashboard')">🏠 &nbsp; Dashboard</a>`;
-  html += `<a class="${currentView === 'whats-new' ? 'active' : ''}" onclick="switchView('whats-new')">📡 &nbsp; What's new</a>`;
-  html += `<a class="${currentView === 'exploit' ? 'active' : ''}" onclick="switchView('exploit')">🚀 &nbsp; Run Exploit</a>`;
+  let html = `<a class="${currentView === 'dashboard' ? 'active' : ''}" onclick="switchView('dashboard')"><img src="https://img.icons8.com/ios-filled/50/00aaff/home.png"> &nbsp; Dashboard</a>`;
+  html += `<a class="${currentView === 'whats-new' ? 'active' : ''}" onclick="switchView('whats-new')"><img src="https://img.icons8.com/fluency/48/rss.png"> &nbsp; What's new</a>`;
+  html += `<a class="${currentView === 'exploit' ? 'active' : ''}" onclick="switchView('exploit')"><img src="https://img.icons8.com/fluency/48/play-station--v2.png"> &nbsp; Run Exploit</a>`;
   
   WEBUI.categories.forEach(c => {
-    html += `<a class="${currentView === 'category' && activeCategory === c.id ? 'active' : ''}" onclick="switchView('category', '${c.id}')">${c.icon} &nbsp; ${c.name}</a>`;
+    html += `<a class="${currentView === 'category' && activeCategory === c.id ? 'active' : ''}" onclick="switchView('category', '${c.id}')"><img src="${c.iconImg}"> &nbsp; ${c.name}</a>`;
   });
   nav.innerHTML = html;
 
@@ -552,7 +535,7 @@ function renderSidebar() {
 }
 
 /* ==========================================================================
-   LECTEUR RSS AUTO-GÉNÉRÉ PAR LES URLS GITHUB
+   LECTEUR RSS
    ========================================================================== */
 async function fetchRepoNews(repoUrl) {
   try {
@@ -663,7 +646,7 @@ function render() {
     container.innerHTML = WEBUI.categories.map((c, index) => `
       <article class="card" onclick="switchView('category', '${c.id}')" style="cursor:pointer; animation-delay: ${index * 0.05}s;">
         <span class="count">${c.links.length} lien${c.links.length > 1 ? 's' : ''}</span>
-        <div class="icon">${c.icon}</div>
+        <div class="icon"><img src="${c.iconImg}" alt=""></div>
         <h2>${c.name}</h2>
         <div class="desc">${c.description}</div>
         <div class="open">Explorer →</div>
@@ -713,7 +696,7 @@ function render() {
       return `
         <article class="card" ${hasLink ? `onclick="window.open('${targetUrl}', '_blank')"` : ''} style="${hasLink ? 'cursor:pointer;' : 'opacity:0.6;'} animation-delay: ${index * 0.05}s;">
           <span class="count" style="${hasLink ? '' : 'color:#f87171; border-color:#7f1d1d;'}">${badgeText}</span>
-          <div class="icon">${l.icon}</div>
+          <div class="icon"><img src="${l.iconImg}" alt=""></div>
           <h2>${l.name}</h2>
           <div class="desc">${l.description}</div>
           ${hasLink ? `<a class="open" href="${targetUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Ouvrir →</a>` : `<div class="open" style="border-color:#475569; color:#94a3b8; background:transparent;">Non disponible</div>`}
