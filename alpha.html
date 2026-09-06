@@ -46,9 +46,7 @@ main{padding:30px clamp(20px,4vw,55px);max-width:1500px;width:100%;margin:auto}
 .credit-info p{margin:0 0 14px;font-size:14px;color:var(--muted);line-height:1.4}
 .credit-role{display:inline-block;font-size:12px;color:var(--blue);background:#007bff15;padding:4px 12px;border-radius:8px;border:1px solid #124d7c;font-weight:600}
 
-/* Notification Toast */
 #toast {position:fixed;bottom:25px;right:25px;background:#07111f;border:1px solid var(--blue);color:#fff;padding:12px 20px;border-radius:12px;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,0.5);display:none;z-index:9999}
-
 footer{color:#526a83;text-align:center;margin-top:38px;font-size:12px}
 @media(max-width:900px){.app{grid-template-columns:75px 1fr}.logo{font-size:22px;padding:10px 8px 25px}.nav a{justify-content:center;font-size:0}.nav a:first-letter{font-size:18px}.grid{grid-template-columns:repeat(2,1fr)}.credits-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.app{display:block}.sidebar{display:none}main{padding:24px 16px}.top{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:1fr}.title{font-size:42px}}
@@ -160,33 +158,39 @@ function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.style.display = 'block';
-  setTimeout(() => { t.style.display = 'none'; }, 3000);
+  setTimeout(() => { t.style.display = 'none'; }, 3500);
 }
 
-function sendPayload(payloadFileName) {
+// Fonction d'envoi synchrone/asynchrone inspirée de sinajet (fetch binaire -> POST local)
+async function sendPayload(payloadFileName) {
   if (!payloadFileName) {
-    showToast("Aucun payload associé à ce raccourci.");
+    showToast("Erreur : Aucun payload associé.");
     return;
   }
-  showToast("Envoi de " + payloadFileName + " en cours...");
   
-  fetch('payloads/' + payloadFileName)
-    .then(response => {
-      if (!response.ok) throw new Error("Fichier introuvable dans le dossier payloads/");
-      return response.arrayBuffer();
-    })
-    .then(buffer => {
-      return fetch('http://127.0.0.1:8080', {
-        method: 'POST',
-        body: buffer
-      });
-    })
-    .then(() => {
-      showToast("Payload " + payloadFileName + " envoyé avec succès !");
-    })
-    .catch(err => {
-      showToast("Erreur : " + err.message);
+  showToast("Chargement de payloads/" + payloadFileName + "...");
+  
+  try {
+    const response = await fetch('payloads/' + payloadFileName);
+    if (!response.ok) throw new Error("Fichier introuvable (404) dans /payloads");
+    
+    const buffer = await response.arrayBuffer();
+    
+    showToast("Envoi vers WebSrv (127.0.0.1:8080)...");
+    
+    const sendResponse = await fetch('http://127.0.0.1:8080', {
+      method: 'POST',
+      body: buffer
     });
+    
+    if (sendResponse.ok) {
+      showToast("Succès : Payload injecté !");
+    } else {
+      showToast("Erreur serveur WebSrv (Code " + sendResponse.status + ")");
+    }
+  } catch (err) {
+    showToast("Échec : " + err.message + " (Vérifie le protocole HTTP)");
+  }
 }
 
 function handleHostChange(select) {
